@@ -13,10 +13,23 @@ rule("debug.asan")
 rule("module.program")
     on_load(function (target)
         target:set("kind", "binary")
-        target:set("rundir", os.projectdir())
+        target:set("rundir", "$(projectdir)")
         if target:is_plat("windows") and target:get("runtimes") == "MT" then
             target:add("packages", "vc-ltl5")
         end
+    end)
+
+    after_build(function (target)
+        local enabled = target:extraconf("rules", "module.program", "upx")
+        if not enabled then
+            return
+        end
+
+        local upx = assert(import("lib.detect.find_tool")("upx"), "upx not found!")
+        local file = path.join("build", path.filename(target:targetfile()))
+
+        os.tryrm(file)
+        os.execv(upx.program, {target:targetfile(), "-o", file})
     end)
 
 rule("module.component")
@@ -47,4 +60,8 @@ rule("module.test")
         target:set("rundir", os.projectdir())
         target:set("group", "test")
         target:add("packages", "boost_ut")
+    end)
+
+    after_build(function (target)
+        os.exec("xmake run -g test")
     end)

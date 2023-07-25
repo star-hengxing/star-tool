@@ -10,6 +10,7 @@ converter backend:
 
 - [x] microsoft word
 - [ ] libreoffice
+- [ ] PDFNetC(need LicenseKey)
 
 # Build
 
@@ -38,5 +39,5 @@ xmake -y
 
 # Credits
 
-- [portable-file-dialogs](https://github.com/samhocevar/portable-file-dialogs)
+- [nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)
 - [VC-LTL5](https://github.com/Chuyu-Team/VC-LTL5)
